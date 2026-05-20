@@ -3,7 +3,29 @@
 @tailwind utilities;
 
 :root {
-  /* Default Theme: Prism (Premium Dark) */
+  /* Default Theme: mediamtxNeon (slate-900 + cyan-400, matches IoT Dashboard) */
+  --base-bg: #0f172a;          /* slate-900 */
+  --base-text: #e2e8f0;         /* slate-200 */
+  --muted-text: #94a3b8;        /* slate-400 */
+  --surface-bg: rgba(30, 41, 59, 0.6);  /* slate-800 @ 60% */
+  --accent-primary: #06b6d4;    /* cyan-400 */
+  --accent-secondary: #8b5cf6;  /* violet-500 */
+  --accent-tertiary: #f59e0b;   /* amber-500 */
+  --glass-bg: rgba(15, 23, 42, 0.85);   /* slate-900 @ 85% */
+  --glass-border: rgba(6, 182, 212, 0.18); /* cyan-400 @ 18% */
+  --glow-color: rgba(6, 182, 212, 0.18);
+
+  /* Geometry & Physics */
+  --rounding: 8px;
+  --border-width: 1px;
+  --depth: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  --physics: cubic-bezier(0.16, 1, 0.3, 1);
+  --font-main: 'Lexend Deca', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', ui-monospace, Menlo, monospace;
+}
+
+/* Original Prism theme kept as an opt-in alternative */
+.theme-prism {
   --base-bg: #12141c;
   --base-text: #e2e8f0;
   --muted-text: #94a3b8;
@@ -15,12 +37,49 @@
   --glass-border: rgba(255, 255, 255, 0.08);
   --glow-color: rgba(244, 63, 94, 0.15);
 
-  /* Geometry & Physics */
   --rounding: 4px;
   --border-width: 1px;
   --depth: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
   --physics: cubic-bezier(0.16, 1, 0.3, 1);
   --font-main: 'Outfit', sans-serif;
+}
+
+/* mediamtxNeon is the new :root default; this class is here so callers that
+ * explicitly request `theme-mediamtxNeon` get the same tokens without leaning
+ * on cascade order. */
+.theme-mediamtxNeon {
+  --base-bg: #0f172a;
+  --base-text: #e2e8f0;
+  --muted-text: #94a3b8;
+  --surface-bg: rgba(30, 41, 59, 0.6);
+  --accent-primary: #06b6d4;
+  --accent-secondary: #8b5cf6;
+  --accent-tertiary: #f59e0b;
+  --glass-bg: rgba(15, 23, 42, 0.85);
+  --glass-border: rgba(6, 182, 212, 0.18);
+  --glow-color: rgba(6, 182, 212, 0.18);
+
+  --rounding: 8px;
+  --border-width: 1px;
+  --depth: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  --physics: cubic-bezier(0.16, 1, 0.3, 1);
+  --font-main: 'Lexend Deca', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', ui-monospace, Menlo, monospace;
+}
+
+/* Embed mode: when the manager is iframed into the IoT Dashboard, hide our
+ * own outer chrome so the dashboard's shell isn't doubled. The hook in
+ * App.jsx adds .embed-mode to <html> when ?embed=1 or window!==top.
+ *
+ * Hides every top-level <aside> (both the wide labeled sidebar used by the
+ * manager theme and the icon-only mini sidebar used by everything else).
+ * The <header> inside <main> is content (current tab title) and stays. */
+.embed-mode aside {
+  display: none !important;
+}
+.embed-mode main {
+  /* Reclaim the sidebar's space so content fills the iframe width. */
+  margin-left: 0 !important;
 }
 
 .theme-flat {
@@ -104,10 +163,18 @@ body {
   padding: 0;
   background-color: var(--base-bg);
   color: var(--base-text);
-  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  font-family: var(--font-main);
   overflow: hidden;
   position: relative;
   transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Mono surfaces (code editors, terminal frames, entity ids) */
+.font-mono,
+code,
+kbd,
+pre {
+  font-family: var(--font-mono);
 }
 
 /* Custom Scrollbar */

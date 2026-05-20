@@ -83,11 +83,15 @@ import Domains from './components/Domains';
 import CaddyLogo from './components/CaddyLogo';
 import NodeIdentity from './components/NodeIdentity';
 import api from './api';
+import { useEmbedMode } from './hooks/useEmbedMode';
 
 function App() {
+  const { isEmbedded } = useEmbedMode();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [theme, setTheme] = useState(localStorage.getItem('caddy-theme') || 'prism');
+  // mediamtxNeon is the new default; falls back to whatever the user has
+  // explicitly picked via the theme switcher (prism/flat/horizon/terminal/manager).
+  const [theme, setTheme] = useState(localStorage.getItem('caddy-theme') || 'mediamtxNeon');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
@@ -152,7 +156,8 @@ function App() {
   };
 
   const themes = [
-    { id: 'prism', name: 'Prism Command', icon: CaddyLogo, desc: 'High-contrast dark neon' },
+    { id: 'mediamtxNeon', name: 'MediaMTX Neon', icon: Zap, desc: 'Slate-900 + cyan-400, matches IoT Dashboard' },
+    { id: 'prism', name: 'Prism Command', icon: CaddyLogo, desc: 'High-contrast dark neon (original)' },
     { id: 'flat', name: 'Flat Professional', icon: LayoutDashboard, desc: 'Clean light mode' },
     { id: 'horizon', name: 'Aura Horizon', icon: Globe, desc: 'Premium space sunset' },
     { id: 'terminal', name: 'Matrix Terminal', icon: Terminal, desc: 'Retro utility monochrome' },
@@ -195,7 +200,7 @@ function App() {
 
   // Show login if not authenticated
   if (!isAuthenticated) {
-    return <Login onLogin={handleLogin} globalSettings={globalSettings} />;
+    return <Login onLogin={handleLogin} globalSettings={globalSettings} theme={theme} />;
   }
 
 
