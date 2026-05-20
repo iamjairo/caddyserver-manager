@@ -14,6 +14,9 @@ const AdmZip = require('adm-zip');
 const os = require('os');
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 
+// Import new module routes
+const { setupRoutes } = require('./routes');
+
 
 
 const app = express();
@@ -32,14 +35,22 @@ app.get('/api/ping', (req, res) => res.json({ status: 'ok', message: 'pong', tim
 app.get('/api/system/discovery', (req, res) => {
     res.json({
         name: 'Caddy Manager',
-        version: '2.0.4',
+        version: '3.0.0',
         platform: process.platform,
-        features: ['domains', 'terminal', 'ssl', 'deployment'],
+        features: [
+            'domains', 'terminal', 'ssl', 'deployment',
+            'analytics', 'waf', 'geo-blocking', 'mtls',
+            'api-tokens', 'audit-logs', 'backup-restore',
+            'snippets', 'templates', 'prometheus-metrics'
+        ],
         auth_required: true
     });
 });
 
-// Apply auth middleware to all other routes
+// Setup new v3.0 API routes (includes auth middleware internally)
+setupRoutes(app, authMiddleware);
+
+// Apply auth middleware to legacy routes below
 app.use(authMiddleware);
 
 // --- System Management Endpoints (Mobile/Web) ---
