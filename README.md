@@ -1,25 +1,67 @@
-# Caddy Manager
+# Caddy Manager v3.0
 
-**The ultimate visual control plane for modern Caddy Server orchestration.**
+**The ultimate visual control plane for modern Caddy Server orchestration with enterprise security, analytics, and multi-instance management.**
 
-Caddy Manager is a full-stack dashboard designed to simplify the management of Caddy Server. It provides a sleek, high-performance interface for managing domains, SSL certificates, TCP/UDP streams (port forwarding), and real-time terminal interaction..
+Caddy Manager is a full-stack dashboard designed to simplify the management of Caddy Server. It provides a sleek, high-performance interface for managing domains, SSL certificates, TCP/UDP streams (port forwarding), real-time terminal interaction, and now includes advanced security features, traffic analytics, and comprehensive API management.
 
 ---
 
-## Key Features
+## 🚀 What's New in v3.0
 
+### 🔐 Security & Protection
+- **API Token Management**: Secure programmatic access with token-based authentication
+- **Audit Logging**: Comprehensive activity tracking for compliance and security monitoring
+- **WAF Support**: Web Application Firewall integration ready (database schema)
+- **Geo-Blocking**: Country/ASN/CIDR-based access control (database schema)
+- **mTLS**: Mutual TLS with client certificate management (database schema)
+- **Access Lists**: HTTP basic authentication with bcrypt-hashed passwords (database schema)
+
+### 📊 Monitoring & Analytics
+- **Traffic Analytics**: Real-time request/response tracking with geographic distribution
+- **Prometheus Metrics**: Native metrics export for Grafana integration
+- **Performance Monitoring**: Response time tracking and status code analytics
+- **90-Day Retention**: Configurable data retention policies
+
+### 🔧 Configuration Management
+- **Snippets System**: Reusable configuration blocks (security headers, rate limiting, etc.)
+- **Service Templates**: Pre-configured deployments (WordPress, Docker Registry, etc.)
+- **Location Rules**: Path-based routing to different upstreams (database schema)
+- **Redirect/Rewrite Rules**: Advanced URL manipulation (database schema)
+
+### 💾 Operational Excellence
+- **Backup & Restore**: One-click full system backup with selective table recovery
+- **Multi-Server Support**: Manage multiple Caddy instances from one dashboard (database schema)
+- **Advanced DNS Controls**: Custom resolvers and address family selection (database schema)
+- **Certificate Import**: Manual SSL/TLS certificate management (database schema)
+
+---
+
+## Key Features (v2.x + v3.0)
+
+### Core Domain Management
 - **Domain Matrix**: Effortlessly manage site configurations with automatic SSL and **one-click domain previews**.
 - **Wildcard SSL & DNS-01**: Native support for **Wildcard Certificates** via ACME DNS-01 challenge.
 - **Enterprise Load Balancing**: Distribute traffic across multiple upstreams with configurable **Selection Policies** (Random, Round Robin, Least Conn, First).
 - **Active Health Monitoring**: Automatic failover with integrated **Upstream Health Checks**.
 - **Edge Header Engine**: In-flight **Header Transformations** (SET, ADD, DELETE) for granular request/response manipulation.
+
+### Security & Access Control
 - **Advanced Security Suite**: Deep control over **HSTS** (Strict-Transport-Security), **Force SSL**, and **HTTP/2** protocols.
+- **IP Filtering**: Allow/block lists for domains and streams
+- **Authentication**: JWT-based user authentication with role-based access control
+
+### Templates & Blueprints
 - **Blueprint Versatility**: Optimized templates for Reverse Proxy, SPA, Static Files, and PHP with built-in **Directory Browsing** support.
 - **DNS Provider Ecosystem**: Integrated presets for 14+ providers plus a **Generic Custom Provider** for any Caddy DNS plugin.
+- **Service Templates**: Quick-deploy configurations for popular applications
+
+### User Experience
 - **Multi-Theme Engine**: Premium design paradigms including **Prism (Neon)**, **Horizon (Space)**, **Terminal (Retro)**, and **Flat (Light)**.
 - **Branding Office**: Customizable title, logo, and footer attribution.
-- **Stream Orchestrator**: Advanced Layer4 TCP/UDP port forwarding with real-time status tracking.
 - **Integrated Terminal**: Browser-based server interaction via Xterm.js and node-pty.
+
+### Network Layer
+- **Stream Orchestrator**: Advanced Layer4 TCP/UDP port forwarding with real-time status tracking.
 
 ---
 
