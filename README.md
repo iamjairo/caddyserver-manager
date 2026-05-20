@@ -73,6 +73,188 @@ The project is divided into three primary layers:
 2. **Backend (Node.js + Express)**: A robust middleware handling SQLite3 data persistence, Caddy API orchestration, and WebSocket terminal streams. [View Documentation](./CaddyServer-backend/README.md)
 3. **Engine (Caddy + Layer4)**: A high-performance web server built with custom modules for advanced networking capabilities.
 
+### 🏗️ Technology Stack
+
+**Frontend Stack:**
+- ⚛️ **React 19.2.0** - Latest stable React with modern hooks and concurrent features
+- ⚡ **Vite 4.5.14** - Lightning-fast build tool with HMR and optimized production builds
+- 🎨 **Tailwind CSS 3.4.17** - Utility-first CSS framework with JIT compilation
+- 🎭 **Framer Motion 12.29.2** - Production-ready animation library for smooth transitions
+- 🎨 **PostCSS + Autoprefixer** - CSS processing pipeline
+- 🔤 **Lucide React 0.563.0** - Beautiful, consistent icon system (1000+ icons)
+- 🌐 **Axios** - Promise-based HTTP client for API communication
+- 💻 **@xterm/xterm** - Full-featured terminal emulator in the browser
+- 🎨 **clsx + tailwind-merge** - Dynamic className management
+
+**Backend Stack:**
+- 🚀 **Node.js + Express 5.2.1** - Fast, minimalist web framework
+- 💾 **SQLite3** - Lightweight, serverless database with 17 tables
+- 🔐 **bcryptjs** - Secure password hashing
+- 🎫 **jsonwebtoken** - JWT authentication with API token support
+- 📊 **Prometheus Metrics** - Native metrics export for monitoring
+- 📝 **Swagger/OpenAPI** - Interactive API documentation
+- ⏰ **node-cron** - Scheduled task management
+- 🔌 **WebSocket (ws)** - Real-time bidirectional communication
+- 🗜️ **adm-zip** - Backup compression and extraction
+
+**Database Schema:**
+- 17+ tables supporting domains, streams, users, analytics, WAF, geo-blocking, mTLS, snippets, templates, backups, and more
+- Automatic migrations on startup
+- Foreign key constraints and proper indexing
+
+### 📦 Project Structure
+
+```
+caddyserver-manager/
+├── CaddyServer-frontend/          # React + Vite frontend
+│   ├── src/
+│   │   ├── components/            # React components
+│   │   │   ├── Documentation.jsx
+│   │   │   ├── Domains.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Settings.jsx
+│   │   │   ├── WebTerminal.jsx
+│   │   │   └── ...
+│   │   ├── data/                  # Static data and configs
+│   │   ├── api.js                 # API client wrapper
+│   │   ├── App.jsx                # Main application component
+│   │   ├── main.jsx               # Entry point
+│   │   └── index.css              # Tailwind directives
+│   ├── vite.config.js             # Vite configuration
+│   ├── tailwind.config.js         # Tailwind customization
+│   ├── postcss.config.js          # PostCSS setup
+│   └── package.json
+│
+├── CaddyServer-backend/           # Node.js + Express backend
+│   ├── routes/                    # API route modules (v3.0)
+│   │   ├── index.js               # Routes orchestrator
+│   │   ├── api-tokens.js          # Token management
+│   │   ├── audit-logs.js          # Activity tracking
+│   │   ├── analytics.js           # Traffic analytics
+│   │   ├── snippets.js            # Config snippets
+│   │   ├── service-templates.js   # Deployment templates
+│   │   └── backups.js             # Backup/restore
+│   ├── db.js                      # Database initialization
+│   ├── auth.js                    # Authentication middleware
+│   ├── server.js                  # Express application
+│   ├── terminal.js                # WebSocket terminal handler
+│   └── package.json
+│
+├── NEW_MODULES.md                 # v3.0 API documentation
+├── UPGRADE_GUIDE.md               # Migration instructions
+└── README.md                      # This file
+```
+
+### 🔌 API Architecture
+
+**REST API (v3.0):**
+All new endpoints are versioned under `/api/v1/`:
+
+```javascript
+// Authentication
+POST   /api/auth/login              // JWT login
+POST   /api/auth/logout             // Session termination
+
+// API Tokens
+GET    /api/v1/api-tokens           // List tokens
+POST   /api/v1/api-tokens           // Create token
+DELETE /api/v1/api-tokens/:id       // Revoke token
+
+// Audit Logs
+GET    /api/v1/audit-logs           // Query logs with filters
+GET    /api/v1/audit-logs/stats     // Aggregated statistics
+
+// Traffic Analytics
+GET    /api/v1/analytics/traffic    // Raw traffic data
+GET    /api/v1/analytics/stats      // Aggregated metrics
+
+// Configuration Snippets
+GET    /api/v1/snippets             // List snippets
+POST   /api/v1/snippets             // Create snippet
+PUT    /api/v1/snippets/:id         // Update snippet
+DELETE /api/v1/snippets/:id         // Delete snippet
+
+// Service Templates
+GET    /api/v1/service-templates    // List templates
+POST   /api/v1/service-templates    // Create template
+POST   /api/v1/service-templates/:id/render  // Render with variables
+
+// Backup & Restore
+GET    /api/v1/backups              // List backups
+POST   /api/v1/backups              // Create backup
+POST   /api/v1/backups/:id/restore  // Restore from backup
+GET    /api/v1/backups/:id/download // Download backup file
+
+// Prometheus Metrics
+GET    /metrics                     // Prometheus exposition format
+```
+
+### 🎨 Component Integration
+
+The architecture is fully compatible with any React+Vite+Tailwind dashboard or component library. New features can be added seamlessly:
+
+```jsx
+// Example: Adding a new analytics component
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { BarChart3, TrendingUp } from 'lucide-react';
+import axios from 'axios';
+
+export const Analytics = () => {
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    axios.get('/api/v1/analytics/stats?hours=24')
+      .then(res => setStats(res.data));
+  }, []);
+
+  return (
+    <motion.div
+      className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-lg"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <div className="flex items-center gap-2 mb-4">
+        <BarChart3 className="w-6 h-6 text-primary-500" />
+        <h2 className="text-xl font-bold">Traffic Analytics</h2>
+      </div>
+      {/* Component content with Tailwind classes */}
+    </motion.div>
+  );
+};
+```
+
+### 🔄 Development Workflow
+
+```bash
+# Frontend development (port 3000)
+cd CaddyServer-frontend
+npm install
+npm run dev
+
+# Backend development (port 4000)
+cd CaddyServer-backend
+npm install
+npm run dev  # Uses nodemon for auto-reload
+
+# Production build
+cd CaddyServer-frontend
+npm run build  # Outputs to dist/
+```
+
+**Vite Configuration Highlights:**
+- API proxy: `/api` → `http://localhost:4000`
+- WebSocket proxy: `/ws` → `ws://localhost:4000`
+- Hot Module Replacement (HMR) enabled
+- Automatic React refresh on save
+- Optimized production bundles with code splitting
+
+**Tailwind Configuration:**
+- Custom primary color palette (blue scale)
+- Dark mode support via `class` strategy
+- Content scanning for all `.jsx`, `.js`, `.tsx`, `.ts` files
+- JIT compilation for minimal CSS output
+
 ---
 
 ##  Design & Aesthetic
